@@ -33,7 +33,7 @@ app.get('/users', async (request, response) => {
       const results = { 'results': (result) ? result.rows : null};
       console.log(results);
       // response.render('pages/db', results);
-      response.status(204).json(results);
+      response.status(200).json(results);
       client.release();
     } catch (err) {
       console.error(err);
