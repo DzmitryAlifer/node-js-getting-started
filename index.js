@@ -35,10 +35,10 @@ express()
       response.send('Error: ' + err);
     }
   })
-  // .get('/users2', getUsers)
+  .get('/users2', getUsers)
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
-  // const getUsers = (request, response) => {
+  const getUsers = (request, response) => {
   //   pool.query('SELECT * FROM users', (error, results) => {
   //     if (error) {
   //         throw error;
@@ -46,4 +46,4 @@ express()
   
   //     response.status(200).json(results.rows);
   //   });
-  // };
+  };
