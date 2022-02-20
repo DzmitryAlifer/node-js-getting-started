@@ -30,9 +30,9 @@ app.get('/users', async (request, response) => {
     try {
       const client = await pool.connect();
       const databaseResponse = await client.query('SELECT * FROM users');
-      console.log(databaseResponse);
+      console.log(databaseResponse.rows);
       // response.render('pages/db', results);
-      response.status(200).json(databaseResponse.results);
+      response.status(200).json(databaseResponse.rows);
       client.release();
     } catch (err) {
       console.error(err);
