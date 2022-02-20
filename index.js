@@ -20,7 +20,7 @@ express()
       const result = await client.query('SELECT * FROM users');
       const results = { 'results': (result) ? result.rows : null};
       console.log(results);
-      res.render('pages/db1', results );
+      res.render('pages/db', results );
       client.release();
     } catch (err) {
       console.error(err);
