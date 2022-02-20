@@ -1,6 +1,8 @@
 const cool = require('cool-ascii-faces');
 const express = require('express');
 const path = require('path');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const PORT = process.env.PORT || 5000;
 const { Pool } = require('pg');
 const pool = new Pool({
@@ -9,6 +11,9 @@ const pool = new Pool({
 });
 
 express()
+  .use(cors())
+  .use(bodyParser.json())
+  .use(bodyParser.urlencoded({extended: true}))
   .use(express.static(path.join(__dirname, 'public')))
   .use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
