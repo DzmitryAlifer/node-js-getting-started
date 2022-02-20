@@ -30,9 +30,11 @@ app.get('/users', async (request, response) => {
   response.status(200).json(databaseResponse.rows);
   client.release();
 });
-app.get('/users/:userid', async (request, response) => {
+app.get('/users/:id', async (request, response) => {
+  const id = parseInt(request.params.id);
+  console.log('id=', id);
   const client = await pool.connect();
-  const databaseResponse = await client.query('SELECT * FROM users WHERE id = userid');
+  const databaseResponse = await client.query('SELECT * FROM users WHERE id = $1', [id]);
   response.status(200).json(databaseResponse.rows[0]);
   client.release();
 });
