@@ -1,4 +1,3 @@
-const cool = require('cool-ascii-faces');
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -25,33 +24,17 @@ app.use((req, res, next) => {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.get('/', (req, res) => res.render('pages/index'));
-app.get('/cool', (req, res) => res.send(cool()));
-// app.get('/users', async (request, response) => {
-//     try {
-//       const client = await pool.connect();
-//       const databaseResponse = await client.query('SELECT * FROM users');
-//       console.log(databaseResponse.rows);
-//       // response.render('pages/db', results);
-//       response.status(200).json(databaseResponse.rows);
-//       client.release();
-//     } catch (err) {
-//       console.error(err);
-//       response.send('Error: ' + err);
-//     }
-//   });
-app.get('/users', getUsers);
+app.get('/users', async (request, response) => {
+    try {
+      const client = await pool.connect();
+      const databaseResponse = await client.query('SELECT * FROM users');
+      console.log(databaseResponse.rows);
+      // response.render('pages/db', results);
+      response.status(200).json(databaseResponse.rows);
+      client.release();
+    } catch (err) {
+      console.error(err);
+      response.send('Error: ' + err);
+    }
+  });
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
-
-const getUsers = async (request, response) => {
-  try {
-    const client = await pool.connect();
-    const databaseResponse = await client.query('SELECT * FROM users');
-    console.log(databaseResponse.rows);
-    // response.render('pages/db', results);
-    response.status(200).json(databaseResponse.rows);
-    client.release();
-  } catch (err) {
-    console.error(err);
-    response.send('Error: ' + err);
-  }
-};
