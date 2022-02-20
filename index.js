@@ -5,9 +5,7 @@ const PORT = process.env.PORT || 5000;
 const { Pool } = require('pg');
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  ssl: {rejectUnauthorized: false},
 });
 
 express()
@@ -16,13 +14,13 @@ express()
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
   .get('/cool', (req, res) => res.send(cool()))
-  .get('/db', async (req, res) => {
+  .get('/db/users', async (req, res) => {
     try {
       const client = await pool.connect();
       const result = await client.query('SELECT * FROM users');
       const results = { 'results': (result) ? result.rows : null};
       console.log(results);
-      res.render('pages/db', results );
+      res.render('pages/db/users', results );
       client.release();
     } catch (err) {
       console.error(err);
@@ -30,3 +28,14 @@ express()
     }
   })
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
+
+
+  const getUsers = (request, response) => {
+    pool.query('SELECT * FROM users', (error, results) => {
+      if (error) {
+          throw error;
+      }
+  
+      response.status(200).json(results.rows);
+    });
+  };
