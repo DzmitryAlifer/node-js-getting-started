@@ -30,7 +30,7 @@ app.get('/users', async (request, response) => {
     try {
       const client = await pool.connect();
       const databaseResponse = await client.query('SELECT * FROM users');
-      const results = { 'results': (databaseResponse) ? databaseResponse.results : null};
+      const results = { 'results': (databaseResponse) ? databaseResponse.result : null};
       console.log(results);
       // response.render('pages/db', results);
       response.status(200).json(results);
