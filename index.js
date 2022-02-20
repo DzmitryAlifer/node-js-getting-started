@@ -40,7 +40,7 @@ app.get('/users', async (request, response) => {
       response.send('Error: ' + err);
     }
   });
-app.get('/users2', getUsers);
+// app.get('/users2', getUsers);
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
   const getUsers = (request, response) => {
