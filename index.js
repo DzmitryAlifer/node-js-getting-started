@@ -30,4 +30,11 @@ app.get('/users', async (request, response) => {
   response.status(200).json(databaseResponse.rows);
   client.release();
 });
+app.get('/users/:userId', async (request, response) => {
+  const client = await pool.connect();
+  const databaseResponse = await client.query('SELECT * FROM users WHERE id = userId');
+  console.log(databaseResponse);
+  response.status(200).json(databaseResponse.rows);
+  client.release();
+});
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
