@@ -26,16 +26,15 @@ app.set('view engine', 'ejs');
 app.get('/', (req, res) => res.render('pages/index'));
 app.get('/users', async (request, response) => {
   const client = await pool.connect();
-  const databaseResponse = await client.query('SELECT * FROM users');
-  response.status(200).json(databaseResponse.rows);
+  const resultSet = await client.query('SELECT * FROM users');
+  response.json(resultSet.rows);
   client.release();
 });
 app.get('/users/:id', async (request, response) => {
   const id = parseInt(request.params.id);
-  console.log('id=', id);
   const client = await pool.connect();
-  const databaseResponse = await client.query('SELECT * FROM users WHERE id = $1', [id]);
-  response.status(200).json(databaseResponse.rows[0]);
+  const resultSet = await client.query('SELECT * FROM users WHERE id = $1', [id]);
+  response.json(resultSet.rows[0]);
   client.release();
 });
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
