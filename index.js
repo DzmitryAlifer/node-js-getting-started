@@ -32,8 +32,8 @@ express()
       const result = await client.query('SELECT * FROM users');
       const results = { 'results': (result) ? result.rows : null};
       console.log(results);
-      response.render('pages/db', results);
-      // response.status(200).json(results.rows);
+      // response.render('pages/db', results);
+      response.status(200).json(results.rows);
       client.release();
     } catch (err) {
       console.error(err);
