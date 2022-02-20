@@ -14,13 +14,13 @@ express()
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
   .get('/cool', (req, res) => res.send(cool()))
-  .get('/db/users', async (req, res) => {
+  .get('/db1', async (req, res) => {
     try {
       const client = await pool.connect();
       const result = await client.query('SELECT * FROM users');
       const results = { 'results': (result) ? result.rows : null};
       console.log(results);
-      res.render('pages/db/users', results );
+      res.render('pages/db1', results );
       client.release();
     } catch (err) {
       console.error(err);
