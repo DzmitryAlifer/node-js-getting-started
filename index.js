@@ -21,7 +21,7 @@ express()
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
   .get('/cool', (req, res) => res.send(cool()))
-  .get('/users', async (request, response) => {
+  .get('/users1', async (request, response) => {
     try {
       const client = await pool.connect();
       const result = await client.query('SELECT * FROM users');
@@ -35,4 +35,15 @@ express()
       response.send('Error: ' + err);
     }
   })
+  .get('/users', getUsers)
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
+
+  const getUsers = (request, response) => {
+    pool.query('SELECT * FROM users', (error, results) => {
+      if (error) {
+          throw error;
+      }
+  
+      response.status(200).json(results.rows);
+    });
+  };
