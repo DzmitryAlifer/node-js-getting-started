@@ -25,14 +25,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.get('/', (req, res) => res.render('pages/index'));
 app.get('/users', async (request, response) => {
-    try {
-      const client = await pool.connect();
-      const databaseResponse = await client.query('SELECT * FROM users');
-      response.status(200).json(databaseResponse.rows);
-      client.release();
-    } catch (err) {
-      console.error(err);
-      response.send('Error: ' + err);
-    }
-  });
+  const client = await pool.connect();
+  const databaseResponse = await client.query('SELECT * FROM users');
+  response.status(200).json(databaseResponse.rows);
+  client.release();
+});
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
