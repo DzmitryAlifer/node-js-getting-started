@@ -53,6 +53,7 @@ app.get('/users', async (request, response) => {
   const params = [request.params.username, request.params.password];
   const client = await pool.connect();
   const resultSet = await client.query(LOG_IN_SQL, params);
+  console.log('RESULT_SET', resultSet);
   response.json(resultSet.rows[0]);
   client.release();
 });
