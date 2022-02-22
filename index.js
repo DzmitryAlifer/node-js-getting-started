@@ -53,7 +53,9 @@ app.post('/login', async (request, response) => {
   const params = [request.body.username, request.body.password];
   const client = await pool.connect();
   const resultSet = await client.query(LOG_IN_SQL, params);
-  resultSet.rows.length === 1 ? response.status(200).json(resultSet.rows[0]) : response.status(401);
+  resultSet.rows.length === 1 ? 
+      response.status(200).json(resultSet.rows[0]) : 
+      response.status(401).json(null);
   client.release();
 });
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
