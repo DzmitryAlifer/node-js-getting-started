@@ -12,6 +12,7 @@ const pool = new Pool({
 
 const GET_ALL_USERS = 'SELECT * FROM users;';
 const GET_USER_BY_ID_SQL = 'SELECT * FROM users WHERE id = $1;';
+const LOG_IN_SQL = 'SELECT * FROM users WHERE username = $1 AND password = $2;';
 const CREATE_USER_SQL = 'insert into public.users (username, password, firstname, lastname) values ($1, $2, $3, $4);';
 
 app.use(cors());
@@ -45,6 +46,13 @@ app.post('/users', async (request, response) => {
   const params = [request.body.username, request.body.password, request.body.firstname, request.body.lastname];
   const client = await pool.connect();
   const resultSet = await client.query(CREATE_USER_SQL, params);
+  response.json(resultSet.rows[0]);
+  client.release();
+});
+app.get('/users', async (request, response) => {
+  const params = [request.params.username, request.params.password];
+  const client = await pool.connect();
+  const resultSet = await client.query(LOG_IN_SQL, params);
   response.json(resultSet.rows[0]);
   client.release();
 });
