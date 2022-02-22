@@ -49,8 +49,8 @@ app.post('/users', async (request, response) => {
   response.json(resultSet.rows[0]);
   client.release();
 });
-app.get('/login', async (request, response) => {
-  const params = [request.params.username, request.params.password];
+app.post('/login', async (request, response) => {
+  const params = [request.body.username, request.body.password];
   const client = await pool.connect();
   console.log('REQUEST', request);
   const resultSet = await client.query(LOG_IN_SQL, params);
