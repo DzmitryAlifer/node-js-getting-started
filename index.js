@@ -49,7 +49,7 @@ app.post('/users', async (request, response) => {
   response.json(resultSet.rows[0]);
   client.release();
 });
-app.get('/users', async (request, response) => {
+app.get('/login', async (request, response) => {
   const params = [request.params.username, request.params.password];
   const client = await pool.connect();
   const resultSet = await client.query(LOG_IN_SQL, params);
