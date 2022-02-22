@@ -42,7 +42,7 @@ app.get('/users/:id', async (request, response) => {
   client.release();
 });
 app.post('/users', async (request, response) => {
-  const params = [request.params.username, request.params.password, request.params.firstname, request.params.lastname];
+  const params = [request.body.username, request.body.password, request.body.firstname, request.body.lastname];
   console.log('POST body', request.body);
   const client = await pool.connect();
   const resultSet = await client.query(CREATE_USER_SQL, params);
