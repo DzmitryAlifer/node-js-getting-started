@@ -10,6 +10,10 @@ const pool = new Pool({
   ssl: {rejectUnauthorized: false},
 });
 
+const GET_ALL_USERS = 'SELECT * FROM users;';
+const GET_USER_BY_ID_SQL = 'SELECT * FROM users WHERE id = $1;';
+const CREATE_USER_SQL = 'insert into public.users (username, password, firstname, lastname) values ($1, $2, $3, $4);';
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -26,14 +30,21 @@ app.set('view engine', 'ejs');
 app.get('/', (req, res) => res.render('pages/index'));
 app.get('/users', async (request, response) => {
   const client = await pool.connect();
-  const resultSet = await client.query('SELECT * FROM users');
+  const resultSet = await client.query(GET_ALL_USERS);
   response.json(resultSet.rows);
   client.release();
 });
 app.get('/users/:id', async (request, response) => {
   const id = parseInt(request.params.id);
   const client = await pool.connect();
-  const resultSet = await client.query('SELECT * FROM users WHERE id = $1', [id]);
+  const resultSet = await client.query(GET_USER_BY_ID_SQL, [id]);
+  response.json(resultSet.rows[0]);
+  client.release();
+});
+app.post('/users', async (request, response) => {
+  const params = [request.params.username, request.params.password, request.params.firstname, request.params.lastname];
+  const client = await pool.connect();
+  const resultSet = await client.query(CREATE_USER_SQL, params);
   response.json(resultSet.rows[0]);
   client.release();
 });
