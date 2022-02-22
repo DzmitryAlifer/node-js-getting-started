@@ -43,7 +43,7 @@ app.get('/users/:id', async (request, response) => {
 });
 app.post('/users', async (request, response) => {
   const params = [request.params.username, request.params.password, request.params.firstname, request.params.lastname];
-  console.log('POST params', request.params);
+  console.log('POST body', request.body);
   const client = await pool.connect();
   const resultSet = await client.query(CREATE_USER_SQL, params);
   response.json(resultSet.rows[0]);
