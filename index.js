@@ -10,14 +10,16 @@ const pool = new Pool({
   ssl: {rejectUnauthorized: false},
 });
 
-const GET_ALL_USERS = 'SELECT id, username, firstname, lastname FROM users;';
+
+const GET_ALL_USERS_SQL = 'SELECT id, username, firstname, lastname FROM users;';
 const GET_USER_BY_ID_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE id = $1;';
 const LOG_IN_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE username = $1 AND password = $2;';
 const CREATE_USER_SQL = 'insert into public.users (username, password, firstname, lastname) values ($1, $2, $3, $4);';
+const GET_USER_BY_ID_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE id = $1;';
 
 const getUsers = async (request, response) => {
   const client = await pool.connect();
-  const resultSet = await client.query(GET_ALL_USERS);
+  const resultSet = await client.query(GET_ALL_USERS_SQL);
   response.json(resultSet.rows);
   client.release();
 };
@@ -47,6 +49,7 @@ const login = async (request, response) => {
       response.status(401).json(null);
   client.release();
 };
+
 
 app.use(cors());
 app.use(bodyParser.json());
