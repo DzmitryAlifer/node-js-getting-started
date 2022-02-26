@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const queries = require('./queries');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const PORT = process.env.PORT || 5000;
@@ -29,12 +30,7 @@ app.use((req, res, next) => {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.get('/', (req, res) => res.render('pages/index'));
-app.get('/users', async (request, response) => {
-  const client = await pool.connect();
-  const resultSet = await client.query(GET_ALL_USERS);
-  response.json(resultSet.rows);
-  client.release();
-});
+app.get('/users', queries.getUsers);
 app.get('/users/:id', async (request, response) => {
   const id = parseInt(request.params.id);
   const client = await pool.connect();
