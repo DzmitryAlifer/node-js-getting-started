@@ -10,10 +10,20 @@ const pool = new Pool({
   ssl: {rejectUnauthorized: false},
 });
 
+
 const GET_ALL_USERS_SQL = 'SELECT id, username, firstname, lastname FROM users;';
 const GET_USER_BY_ID_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE id = $1;';
 const LOG_IN_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE username = $1 AND password = $2;';
 const CREATE_USER_SQL = 'insert into public.users (username, password, firstname, lastname) values ($1, $2, $3, $4);';
+
+
+const getAllUsers = async (request, response) => {
+  const client = await pool.connect();
+  const resultSet = await client.query(GET_ALL_USERS_SQL);
+  response.json(resultSet.rows);
+  client.release();
+};
+
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -29,12 +39,7 @@ app.use((req, res, next) => {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.get('/', (req, res) => res.render('pages/index'));
-app.get('/users', async (request, response) => {
-  const client = await pool.connect();
-  const resultSet = await client.query(GET_ALL_USERS_SQL);
-  response.json(resultSet.rows);
-  client.release();
-});
+app.get('/users', getAllUsers);
 app.get('/users/:id', async (request, response) => {
   const id = parseInt(request.params.id);
   const client = await pool.connect();
