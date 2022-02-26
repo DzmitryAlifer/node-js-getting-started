@@ -17,7 +17,7 @@ const LOG_IN_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE us
 const CREATE_USER_SQL = 'insert into public.users (username, password, firstname, lastname) values ($1, $2, $3, $4);';
 const GET_USER_BY_ID_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE id = $1;';
 
-const getUsers = async (request, response) => {
+const getUsers = (request, response) => {
   const client = await pool.connect();
   const resultSet = await client.query(GET_ALL_USERS_SQL);
   response.json(resultSet.rows);
