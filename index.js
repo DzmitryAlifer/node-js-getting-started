@@ -16,6 +16,13 @@ const GET_USER_BY_ID_SQL = 'SELECT id, username, firstname, lastname FROM users 
 const LOG_IN_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE username = $1 AND password = $2;';
 const CREATE_USER_SQL = 'insert into public.users (username, password, firstname, lastname) values ($1, $2, $3, $4);';
 
+const getUsers = async (request, response) => {
+  const client = await pool.connect();
+  const resultSet = await client.query(GET_ALL_USERS);
+  response.json(resultSet.rows);
+  client.release();
+};
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -30,7 +37,7 @@ app.use((req, res, next) => {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.get('/', (req, res) => res.render('pages/index'));
-app.get('/users', queries.getUsers);
+app.get('/users', getUsers);
 app.get('/users/:id', async (request, response) => {
   const id = parseInt(request.params.id);
   const client = await pool.connect();
