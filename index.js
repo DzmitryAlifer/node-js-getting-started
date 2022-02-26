@@ -5,7 +5,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const PORT = process.env.PORT || 5000;
-const { Pool } = require('pg');
+const Pool = require('pg').Pool;
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {rejectUnauthorized: false},
@@ -37,7 +37,7 @@ app.use((req, res, next) => {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.get('/', (req, res) => res.render('pages/index'));
-app.get('/users', queries.getUsers);
+app.get('/users', getUsers);
 app.get('/users/:id', async (request, response) => {
   const id = parseInt(request.params.id);
   const client = await pool.connect();
