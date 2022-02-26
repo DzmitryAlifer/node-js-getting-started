@@ -24,6 +24,32 @@ const getAllUsers = async (request, response) => {
   client.release();
 };
 
+const getUserById = async (request, response) => {
+  const id = parseInt(request.params.id);
+  const client = await pool.connect();
+  const resultSet = await client.query(GET_USER_BY_ID_SQL, [id]);
+  response.json(resultSet.rows[0]);
+  client.release();
+};
+
+const createUser = async (request, response) => {
+  const params = [request.body.username, request.body.password, request.body.firstname, request.body.lastname];
+  const client = await pool.connect();
+  const resultSet = await client.query(CREATE_USER_SQL, params);
+  response.json(resultSet.rows[0]);
+  client.release();
+};
+
+const login = async (request, response) => {
+  const params = [request.body.username, request.body.password];
+  const client = await pool.connect();
+  const resultSet = await client.query(LOG_IN_SQL, params);
+  resultSet.rows.length === 1 ? 
+      response.status(200).json(resultSet.rows[0]) : 
+      response.status(401).json(null);
+  client.release();
+};
+
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -40,27 +66,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.get('/', (req, res) => res.render('pages/index'));
 app.get('/users', getAllUsers);
-app.get('/users/:id', async (request, response) => {
-  const id = parseInt(request.params.id);
-  const client = await pool.connect();
-  const resultSet = await client.query(GET_USER_BY_ID_SQL, [id]);
-  response.json(resultSet.rows[0]);
-  client.release();
-});
-app.post('/users', async (request, response) => {
-  const params = [request.body.username, request.body.password, request.body.firstname, request.body.lastname];
-  const client = await pool.connect();
-  const resultSet = await client.query(CREATE_USER_SQL, params);
-  response.json(resultSet.rows[0]);
-  client.release();
-});
-app.post('/login', async (request, response) => {
-  const params = [request.body.username, request.body.password];
-  const client = await pool.connect();
-  const resultSet = await client.query(LOG_IN_SQL, params);
-  resultSet.rows.length === 1 ? 
-      response.status(200).json(resultSet.rows[0]) : 
-      response.status(401).json(null);
-  client.release();
-});
+app.get('/users/:id', getUserById);
+app.post('/users', createUser);
+app.post('/login', login);
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
