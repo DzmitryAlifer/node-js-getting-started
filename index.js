@@ -17,7 +17,7 @@ const LOG_IN_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE us
 const CREATE_USER_SQL = 'insert into public.users (username, password, firstname, lastname) values ($1, $2, $3, $4);';
 const GET_USER_BY_ID_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE id = $1;';
 
-const getUsers = (request, response) => {
+const getUsers = async (request, response) => {
   const client = await pool.connect();
   const resultSet = await client.query(GET_ALL_USERS_SQL);
   response.json(resultSet.rows);
@@ -65,7 +65,12 @@ app.use((req, res, next) => {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.get('/', (req, res) => res.render('pages/index'));
-app.get('/users', getUsers);
+app.get('/users', async (request, response) => {
+  const client = await pool.connect();
+  const resultSet = await client.query(GET_ALL_USERS_SQL);
+  response.json(resultSet.rows);
+  client.release();
+});
 app.get('/users/:id', getUserById);
 app.post('/users', createUser);
 app.post('/login', login);
