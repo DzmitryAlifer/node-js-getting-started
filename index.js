@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const url = require('url');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const PORT = process.env.PORT || 5000;
@@ -53,7 +54,7 @@ const login = async (request, response) => {
 };
 
 const getPrediction = async (request, response) => {
-  console.log('REQUEST', request);
+  console.log('REQUEST', request.url);
   const id = parseInt(request.params.id);
   const client = await pool.connect();
   const resultSet = await client.query(GET_PREDICTION_SQL, [id]);
