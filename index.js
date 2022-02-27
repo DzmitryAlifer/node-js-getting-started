@@ -58,6 +58,7 @@ const getPrediction = async (request, response) => {
   const client = await pool.connect();
   const resultSet = await client.query(GET_PREDICTION_SQL, [userId, round]);
   response.json(resultSet.rows[0]);
+  console.log(resultSet.rows[0]);
   client.release();
 };
 
