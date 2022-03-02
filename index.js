@@ -17,7 +17,7 @@ const GET_USER_BY_ID_SQL = 'SELECT id, username, firstname, lastname FROM users 
 const LOG_IN_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE username = $1 AND password = $2;';
 const CREATE_USER_SQL = 'INSERT INTO users (username, password, firstname, lastname) VALUES ($1, $2, $3, $4);';
 const GET_PREDICTION_SQL = 'SELECT * FROM predictions WHERE userId = $1 AND round = $2';
-const POST_PREDICTION_SQL = 'INSERT INTO predictions (userid, round, places) VALUES ($1, $2, $3);'
+const POST_PREDICTION_SQL = 'INSERT INTO predictions (userid, round, qualification, race) VALUES ($1, $2, $3, $4);'
 
 
 const getAllUsers = async (request, response) => {
@@ -64,7 +64,7 @@ const getPrediction = async (request, response) => {
 
 const addPrediction = async (request, response) => {
   console.log(request.body);
-  const params = [request.body.userid, request.body.round, request.body.places];
+  const params = [request.body.userid, request.body.round, request.body.qualification, request.body.race];
   const client = await pool.connect();
   const resultSet = await client.query(POST_PREDICTION_SQL, params);
   response.json(resultSet.rows[0]);
