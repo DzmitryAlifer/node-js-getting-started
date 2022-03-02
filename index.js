@@ -63,7 +63,6 @@ const getPrediction = async (request, response) => {
 };
 
 const addPrediction = async (request, response) => {
-  console.log(request.body);
   const params = [request.body.userid, request.body.round, request.body.qualification, request.body.race];
   const client = await pool.connect();
   const resultSet = await client.query(POST_PREDICTION_SQL, params);
