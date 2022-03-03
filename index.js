@@ -18,6 +18,7 @@ const LOG_IN_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE us
 const CREATE_USER_SQL = 'INSERT INTO users (username, password, firstname, lastname) VALUES ($1, $2, $3, $4);';
 const GET_PREDICTION_SQL = 'SELECT * FROM predictions WHERE userId = $1 AND round = $2';
 const POST_PREDICTION_SQL = 'INSERT INTO predictions (userid, round, qualification, race) VALUES ($1, $2, $3, $4);'
+const UPDATE_PREDICTION_SQL = 'UPDATE predictions SET qualification = $3, race = $4 WHERE userid = $1 and round = $2;';
 
 
 const getAllUsers = async (request, response) => {
@@ -71,6 +72,15 @@ const addPrediction = async (request, response) => {
   client.release();
 };
 
+const updatePrediction = async (request, response) => {
+  const params = [request.body.userid, request.body.round, request.body.qualification, request.body.race];
+  const client = await pool.connect();
+  const resultSet = await client.query(UPDATE_PREDICTION_SQL, params);
+  const lastPredictionIndex = resultSet.rows.length - 1;
+  response.json(resultSet.rows[lastPredictionIndex]);
+  client.release();
+};
+
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -92,4 +102,5 @@ app.post('/users', createUser);
 app.post('/login', login);
 app.get('/prediction', getPrediction);
 app.post('/prediction', addPrediction);
+app.put('/prediction', updatePrediction);
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
