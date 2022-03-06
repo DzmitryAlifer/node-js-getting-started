@@ -16,6 +16,7 @@ const GET_ALL_USERS_SQL = 'SELECT id, username, firstname, lastname FROM users;'
 const GET_USER_BY_ID_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE id = $1;';
 const LOG_IN_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE username = $1 AND password = $2;';
 const CREATE_USER_SQL = 'INSERT INTO users (username, password, firstname, lastname) VALUES ($1, $2, $3, $4);';
+const GET_ALL_PREDICTIONS_SQL = 'SELECT * FROM predictions;';
 const GET_ALL_USER_PREDICTIONS_SQL = 'SELECT * FROM predictions WHERE userId = $1;';
 const GET_PREDICTION_SQL = 'SELECT * FROM predictions WHERE userId = $1 AND round = $2;';
 const POST_PREDICTION_SQL = 'INSERT INTO predictions (userid, round, qualification, race) VALUES ($1, $2, $3, $4);'
@@ -52,6 +53,13 @@ const login = async (request, response) => {
   resultSet.rows.length === 1 ? 
       response.status(200).json(resultSet.rows[0]) : 
       response.status(401).json(null);
+  client.release();
+};
+
+const getAllPredictions = async (request, response) => {
+  const client = await pool.connect();
+  const resultSet = await client.query(GET_ALL_PREDICTIONS_SQL, [userId]);
+  response.json(resultSet.rows);
   client.release();
 };
 
@@ -109,6 +117,7 @@ app.get('/users', getAllUsers);
 app.get('/users/:id', getUserById);
 app.post('/users', createUser);
 app.post('/login', login);
+app.get('/prediction', getAllPredictions);
 app.get('/prediction', getAllUserPredictions);
 app.get('/prediction', getPrediction);
 app.post('/prediction', addPrediction);
