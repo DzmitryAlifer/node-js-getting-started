@@ -58,7 +58,7 @@ const login = async (request, response) => {
 
 const getAllPredictions = async (request, response) => {
   const client = await pool.connect();
-  const resultSet = await client.query(GET_ALL_PREDICTIONS_SQL, [userId]);
+  const resultSet = await client.query(GET_ALL_PREDICTIONS_SQL);
   response.json(resultSet.rows);
   client.release();
 };
