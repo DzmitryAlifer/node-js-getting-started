@@ -24,6 +24,7 @@ const POST_PREDICTION_SQL = 'INSERT INTO predictions (userid, round, qualificati
 const UPDATE_PREDICTION_SQL = 'UPDATE predictions SET qualification = $3, race = $4 WHERE userid = $1 and round = $2;';
 
 const GET_RESULT_SQL = 'SELECT * FROM results WHERE year = $1 AND round = $2;';
+const GET_YEAR_RESULTS_SQL = 'SELECT * FROM results WHERE year = $1;';
 const POST_RESULT_SQL = 'INSERT INTO results (year, round, qualifying, race) VALUES ($1, $2, $3, $4);'
 const UPDATE_RESULT_SQL = 'UPDATE results SET qualifying = $3, race = $4 WHERE year = $1 and round = $2;';
 
@@ -112,6 +113,14 @@ const getResult = async (request, response) => {
   client.release();
 };
 
+const getYearResults = async (request, response) => {
+  const {year} = url.parse(request.url, true).query;
+  const client = await pool.connect();
+  const resultSet = await client.query(GET_YEAR_RESULTS_SQL, [year]);
+  response.json(resultSet.rows);
+  client.release();
+};
+
 const addResult = async (request, response) => {
   const params = [request.body.year, request.body.round, request.body.qualifying, request.body.race];
   const client = await pool.connect();
@@ -158,6 +167,7 @@ app.post('/prediction', addPrediction);
 app.put('/prediction', updatePrediction);
 
 app.get('/result', getResult);
+app.get('/result', getYearResults);
 app.post('/result', addResult);
 app.put('/result', updateResult);
 
