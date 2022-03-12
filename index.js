@@ -23,7 +23,6 @@ const GET_PREDICTION_SQL = 'SELECT * FROM predictions WHERE userId = $1 AND roun
 const POST_PREDICTION_SQL = 'INSERT INTO predictions (userid, round, qualification, race) VALUES ($1, $2, $3, $4);'
 const UPDATE_PREDICTION_SQL = 'UPDATE predictions SET qualification = $3, race = $4 WHERE userid = $1 and round = $2;';
 
-const GET_RESULT_SQL = 'SELECT * FROM results WHERE year = $1 AND round = $2;';
 const GET_YEAR_RESULTS_SQL = 'SELECT * FROM results WHERE year = $1;';
 const POST_RESULT_SQL = 'INSERT INTO results (year, round, qualifying, race) VALUES ($1, $2, $3, $4);'
 const UPDATE_RESULT_SQL = 'UPDATE results SET qualifying = $3, race = $4 WHERE year = $1 and round = $2;';
