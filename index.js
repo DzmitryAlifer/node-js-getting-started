@@ -104,15 +104,6 @@ const updatePrediction = async (request, response) => {
   client.release();
 };
 
-const getResult = async (request, response) => {
-  const {year, round} = url.parse(request.url, true).query;
-  const client = await pool.connect();
-  const resultSet = await client.query(GET_RESULT_SQL, [year, round]);
-  const lastPredictionIndex = resultSet.rows.length - 1;
-  response.json(resultSet.rows[lastPredictionIndex]);
-  client.release();
-};
-
 const getYearResults = async (request, response) => {
   const {year} = url.parse(request.url, true).query;
   const client = await pool.connect();
@@ -167,7 +158,6 @@ app.get('/prediction', getPrediction);
 app.post('/prediction', addPrediction);
 app.put('/prediction', updatePrediction);
 
-app.get('/result', getResult);
 app.get('/result', getYearResults);
 app.post('/result', addResult);
 app.put('/result', updateResult);
