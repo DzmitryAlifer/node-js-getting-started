@@ -117,6 +117,7 @@ const getYearResults = async (request, response) => {
   const {year} = url.parse(request.url, true).query;
   const client = await pool.connect();
   const resultSet = await client.query(GET_YEAR_RESULTS_SQL, [year]);
+  console.log(resultSet.rows);
   response.json(resultSet.rows);
   client.release();
 };
