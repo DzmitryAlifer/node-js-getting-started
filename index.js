@@ -133,13 +133,13 @@ const updateDriverResults = async (request, response) => {
   client.release();
 };
 
-const getPlayersYearResults = async (request, response) => {
-  const {year} = url.parse(request.url, true).query;
-  const client = await pool.connect();
-  const resultSet = await client.query(GET_YEAR_PLAYERS_RESULTS_SQL, [year]);
-  response.json(resultSet.rows);
-  client.release();
-};
+// const getPlayersYearResults = async (request, response) => {
+//   const {year} = url.parse(request.url, true).query;
+//   const client = await pool.connect();
+//   const resultSet = await client.query(GET_YEAR_PLAYERS_RESULTS_SQL, [year]);
+//   response.json(resultSet.rows);
+//   client.release();
+// };
 
 const addPlayersResults = async (request, response) => {
   // const params = [request.body.year, request.body.round, request.body.qualifying, request.body.race];
@@ -183,7 +183,7 @@ app.get('/driverResult', getYearDriverResults);
 app.post('/driverResult', addDriverResults);
 app.put('/driverResult', updateDriverResults);
 
-app.get('/playerResult', getPlayersYearResults);
+// app.get('/playerResult', getPlayersYearResults);
 app.post('/playerResult', addPlayersResults);
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
