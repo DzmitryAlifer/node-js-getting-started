@@ -156,7 +156,7 @@ const addPlayersResults = async (request, response) => {
     await client.query(POST_PLAYER_RESULT_SQL, params);
   }
 
-  response.status(201);
+  response.json([]);
   client.release();
 };
 
