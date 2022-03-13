@@ -155,9 +155,13 @@ const addPlayersResults = async (request, response) => {
       playerResult.raceGuessedPosition,
     ];
     const resultSet = await client.query(POST_PLAYER_RESULT_SQL, params);
+    console.log(resultSet);
     const lastIndex = resultSet.rows.length - 1;
-    results.push(resultSet[lastIndex]);
+    console.log(lastIndex.rows);
+    console.log(resultSet.rows.length);
     console.log(resultSet[lastIndex]);
+    results.push(resultSet[lastIndex]);
+    
   }
 
   // response.status(201);
