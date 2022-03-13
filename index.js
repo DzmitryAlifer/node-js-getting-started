@@ -141,16 +141,15 @@ const updateDriverResults = async (request, response) => {
 //   client.release();
 // };
 
-// const addPlayersResults = async (request, response) => {
-//   // const params = [request.body.year, request.body.round, request.body.qualifying, request.body.race];
-//   const body = JSON.parse(request.body);
-//   console.log(body);
-//   const client = await pool.connect();
-//   const resultSet = await client.query(POST_PLAYER_RESULT_SQL, body);
-//   const lastPredictionIndex = resultSet.rows.length - 1;
-//   response.json(resultSet.rows[lastPredictionIndex]);
-//   client.release();
-// };
+const addPlayersResults = async (request, response) => {
+  // const body = JSON.parse(request.body);
+  // console.log(body);
+  const client = await pool.connect();
+  // const resultSet = await client.query(POST_PLAYER_RESULT_SQL, body);
+  // const lastPredictionIndex = resultSet.rows.length - 1;
+  // response.json(resultSet.rows[lastPredictionIndex]);
+  client.release();
+};
 
 
 app.use(cors());
@@ -184,6 +183,6 @@ app.post('/driverResult', addDriverResults);
 app.put('/driverResult', updateDriverResults);
 
 // app.get('/playerResult', getPlayersYearResults);
-// app.post('/playerResult', addPlayersResults);
+app.post('/playerResult', addPlayersResults);
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
