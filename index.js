@@ -157,6 +157,7 @@ const addPlayersResults = async (request, response) => {
     const resultSet = await client.query(POST_PLAYER_RESULT_SQL, params);
     const lastIndex = resultSet.rows.length - 1;
     results.push(resultSet[lastIndex]);
+    console.log(resultSet[lastIndex]);
   }
 
   // response.status(201);
