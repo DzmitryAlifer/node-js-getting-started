@@ -23,9 +23,9 @@ const GET_PREDICTION_SQL = 'SELECT * FROM predictions WHERE userId = $1 AND roun
 const POST_PREDICTION_SQL = 'INSERT INTO predictions (userid, round, qualification, race) VALUES ($1, $2, $3, $4);'
 const UPDATE_PREDICTION_SQL = 'UPDATE predictions SET qualification = $3, race = $4 WHERE userid = $1 and round = $2;';
 
-const GET_YEAR_RESULTS_SQL = 'SELECT * FROM results WHERE year = $1;';
-const POST_RESULT_SQL = 'INSERT INTO results (year, round, qualifying, race) VALUES ($1, $2, $3, $4);'
-const UPDATE_RESULT_SQL = 'UPDATE results SET qualifying = $3, race = $4 WHERE year = $1 and round = $2;';
+const GET_YEAR_DRIVER_RESULTS_SQL = 'SELECT * FROM driver_results WHERE year = $1;';
+const POST_DRIVER_RESULT_SQL = 'INSERT INTO driver_results (year, round, qualifying, race) VALUES ($1, $2, $3, $4);'
+const UPDATE_DRIVER_RESULT_SQL = 'UPDATE driver_results SET qualifying = $3, race = $4 WHERE year = $1 and round = $2;';
 
 
 const getAllUsers = async (request, response) => {
@@ -106,7 +106,7 @@ const updatePrediction = async (request, response) => {
 const getYearResults = async (request, response) => {
   const {year} = url.parse(request.url, true).query;
   const client = await pool.connect();
-  const resultSet = await client.query(GET_YEAR_RESULTS_SQL, [year]);
+  const resultSet = await client.query(GET_YEAR_DRIVER_RESULTS_SQL, [year]);
   response.json(resultSet.rows);
   client.release();
 };
@@ -114,7 +114,7 @@ const getYearResults = async (request, response) => {
 const addResult = async (request, response) => {
   const params = [request.body.year, request.body.round, request.body.qualifying, request.body.race];
   const client = await pool.connect();
-  const resultSet = await client.query(POST_RESULT_SQL, params);
+  const resultSet = await client.query(POST_DRIVER_RESULT_SQL, params);
   const lastPredictionIndex = resultSet.rows.length - 1;
   response.json(resultSet.rows[lastPredictionIndex]);
   client.release();
@@ -123,7 +123,7 @@ const addResult = async (request, response) => {
 const updateResult = async (request, response) => {
   const params = [request.body.year, request.body.round, request.body.qualifying, request.body.race];
   const client = await pool.connect();
-  const resultSet = await client.query(UPDATE_RESULT_SQL, params);
+  const resultSet = await client.query(UPDATE_DRIVER_RESULT_SQL, params);
   const lastPredictionIndex = resultSet.rows.length - 1;
   response.json(resultSet.rows[lastPredictionIndex]);
   client.release();
@@ -156,8 +156,8 @@ app.get('/prediction', getPrediction);
 app.post('/prediction', addPrediction);
 app.put('/prediction', updatePrediction);
 
-app.get('/result', getYearResults);
-app.post('/result', addResult);
-app.put('/result', updateResult);
+app.get('/driverResult', getYearResults);
+app.post('/driverResult', addResult);
+app.put('/driverResult', updateResult);
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
