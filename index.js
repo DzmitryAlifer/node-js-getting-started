@@ -143,7 +143,7 @@ const updateDriverResults = async (request, response) => {
 
 const addPlayersResults = async (request, response) => {
   // const body = JSON.parse(request.body);
-  console.log('BODY', request.body.qualGuessedOnList);
+  console.log('BODY', request.body);
   const client = await pool.connect();
   // const resultSet = await client.query(POST_PLAYER_RESULT_SQL, body);
   // const lastPredictionIndex = resultSet.rows.length - 1;
