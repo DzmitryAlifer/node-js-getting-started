@@ -27,7 +27,7 @@ const GET_YEAR_DRIVER_RESULTS_SQL = 'SELECT * FROM driver_results WHERE year = $
 const POST_DRIVER_RESULT_SQL = 'INSERT INTO driver_results (year, round, qualifying, race) VALUES ($1, $2, $3, $4);'
 const UPDATE_DRIVER_RESULT_SQL = 'UPDATE driver_results SET qualifying = $3, race = $4 WHERE year = $1 and round = $2;';
 
-const GET_YEAR_PLAYERS_RESULTS_SQL = 'SELECT * FROM player_results WHERE year = $1;';
+const GET_PLAYERS_YEAR_RESULTS_SQL = 'SELECT * FROM player_results WHERE year = $1;';
 const POST_PLAYER_RESULT_SQL = 'INSERT INTO player_results (year, round, userid, qual_guessed_on_list, qual_guessed_position, race_guessed_on_list, race_guessed_position) VALUES ($1, $2, $3, $4, $5, $6, $7);'
 
 
@@ -132,13 +132,13 @@ const updateDriverResults = async (request, response) => {
   client.release();
 };
 
-// const getPlayersYearResults = async (request, response) => {
-//   const {year} = url.parse(request.url, true).query;
-//   const client = await pool.connect();
-//   const resultSet = await client.query(GET_YEAR_PLAYERS_RESULTS_SQL, [year]);
-//   response.json(resultSet.rows);
-//   client.release();
-// };
+const getPlayersYearResults = async (request, response) => {
+  const {year} = url.parse(request.url, true).query;
+  const client = await pool.connect();
+  const resultSet = await client.query(GET_PLAYERS_YEAR_RESULTS_SQL, [year]);
+  response.json(resultSet.rows);
+  client.release();
+};
 
 const addPlayersResults = async (request, response) => {
   const client = await pool.connect();
@@ -191,7 +191,7 @@ app.get('/driverResult', getYearDriverResults);
 app.post('/driverResult', addDriverResults);
 app.put('/driverResult', updateDriverResults);
 
-// app.get('/playerResult', getPlayersYearResults);
+app.get('/playerResult', getPlayersYearResults);
 app.post('/playerResult', addPlayersResults);
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
