@@ -142,6 +142,7 @@ const updateDriverResults = async (request, response) => {
 
 const addPlayersResults = async (request, response) => {
   const client = await pool.connect();
+  const results = [];
 
   for (let playerResult of request.body) {
     const params = [
@@ -153,10 +154,13 @@ const addPlayersResults = async (request, response) => {
       playerResult.raceGuessedOnList,
       playerResult.raceGuessedPosition,
     ];
-    await client.query(POST_PLAYER_RESULT_SQL, params);
+    const resultSet = await client.query(POST_PLAYER_RESULT_SQL, params);
+    const lastIndex = resultSet.rows.length - 1;
+    results.push(resultSet[lastIndex]);
   }
 
-  response.status(201);
+  // response.status(201);
+  response.json(results);
   client.release();
 };
 
