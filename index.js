@@ -27,6 +27,10 @@ const GET_YEAR_DRIVER_RESULTS_SQL = 'SELECT * FROM driver_results WHERE year = $
 const POST_DRIVER_RESULT_SQL = 'INSERT INTO driver_results (year, round, qualifying, race) VALUES ($1, $2, $3, $4);'
 const UPDATE_DRIVER_RESULT_SQL = 'UPDATE driver_results SET qualifying = $3, race = $4 WHERE year = $1 and round = $2;';
 
+const GET_YEAR_PLAYERS_RESULTS_SQL = 'SELECT * FROM player_results WHERE year = $1;';
+const POST_PLAYER_RESULT_SQL = 'INSERT INTO player_results (year, round, userid, qual_guessed_on_list, qual_guessed_position, race_guessed_on_list, race_guessed_position) ' +
+    'WHERE year = $1 AND round = $2 AND userid = $3 AND qual_guessed_on_list = $4 AND qual_guessed_position = $5 AND race_guessed_on_list = $6  AND race_guessed_position = $7;';
+
 
 const getAllUsers = async (request, response) => {
   const client = await pool.connect();
@@ -103,7 +107,7 @@ const updatePrediction = async (request, response) => {
   client.release();
 };
 
-const getYearResults = async (request, response) => {
+const getYearDriverResults = async (request, response) => {
   const {year} = url.parse(request.url, true).query;
   const client = await pool.connect();
   const resultSet = await client.query(GET_YEAR_DRIVER_RESULTS_SQL, [year]);
@@ -111,7 +115,7 @@ const getYearResults = async (request, response) => {
   client.release();
 };
 
-const addResult = async (request, response) => {
+const addDriverResults = async (request, response) => {
   const params = [request.body.year, request.body.round, request.body.qualifying, request.body.race];
   const client = await pool.connect();
   const resultSet = await client.query(POST_DRIVER_RESULT_SQL, params);
@@ -120,10 +124,29 @@ const addResult = async (request, response) => {
   client.release();
 };
 
-const updateResult = async (request, response) => {
+const updateDriverResults = async (request, response) => {
   const params = [request.body.year, request.body.round, request.body.qualifying, request.body.race];
   const client = await pool.connect();
   const resultSet = await client.query(UPDATE_DRIVER_RESULT_SQL, params);
+  const lastPredictionIndex = resultSet.rows.length - 1;
+  response.json(resultSet.rows[lastPredictionIndex]);
+  client.release();
+};
+
+const getPlayersYearResults = async (request, response) => {
+  const {year} = url.parse(request.url, true).query;
+  const client = await pool.connect();
+  const resultSet = await client.query(GET_YEAR_PLAYERS_RESULTS_SQL, [year]);
+  response.json(resultSet.rows);
+  client.release();
+};
+
+const addPlayersResults = async (request, response) => {
+  // const params = [request.body.year, request.body.round, request.body.qualifying, request.body.race];
+  const body = JSON.parse(request.body);
+  console.log(body);
+  const client = await pool.connect();
+  const resultSet = await client.query(POST_PLAYER_RESULT_SQL, body);
   const lastPredictionIndex = resultSet.rows.length - 1;
   response.json(resultSet.rows[lastPredictionIndex]);
   client.release();
@@ -156,8 +179,11 @@ app.get('/prediction', getPrediction);
 app.post('/prediction', addPrediction);
 app.put('/prediction', updatePrediction);
 
-app.get('/driverResult', getYearResults);
-app.post('/driverResult', addResult);
-app.put('/driverResult', updateResult);
+app.get('/driverResult', getYearDriverResults);
+app.post('/driverResult', addDriverResults);
+app.put('/driverResult', updateDriverResults);
+
+app.get('/playerResult', getPlayersYearResults);
+app.post('/playerResult', addPlayersResults);
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
