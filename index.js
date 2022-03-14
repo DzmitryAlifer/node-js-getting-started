@@ -144,6 +144,7 @@ const addPlayersResults = async (request, response) => {
   const client = await pool.connect();
 
   for (let playerResult of request.body) {
+    console.log(playerResult);
     const params = [
       playerResult.year,
       playerResult.round,
