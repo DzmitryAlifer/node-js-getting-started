@@ -144,15 +144,14 @@ const addPlayersResults = async (request, response) => {
   const client = await pool.connect();
 
   for (let playerResult of request.body) {
-    console.log(playerResult);
     const params = [
       playerResult.year,
       playerResult.round,
       playerResult.userid,
-      playerResult.qualGuessedOnList,
-      playerResult.qualGuessedPosition,
-      playerResult.raceGuessedOnList,
-      playerResult.raceGuessedPosition,
+      playerResult.qual_guessed_on_list,
+      playerResult.qual_guessed_position,
+      playerResult.race_guessed_on_list,
+      playerResult.race_guessed_position,
     ];
     await client.query(POST_PLAYER_RESULT_SQL, params);
   }
