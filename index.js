@@ -31,6 +31,7 @@ const GET_PLAYERS_YEAR_RESULTS_SQL = 'SELECT * FROM player_results WHERE year = 
 const POST_PLAYER_RESULT_SQL = 'INSERT INTO player_results (year, round, userid, qual_guessed_on_list, qual_guessed_position, race_guessed_on_list, race_guessed_position) VALUES ($1, $2, $3, $4, $5, $6, $7);'
 
 
+
 const getAllUsers = async (request, response) => {
   const client = await pool.connect();
   const resultSet = await client.query(GET_ALL_USERS_SQL);
