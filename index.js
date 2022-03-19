@@ -12,7 +12,7 @@ const pool = new Pool({
 });
 
 
-const GET_ALL_USERS_SQL = 'SELECT id, username, firstname, lastname, seasonpoints FROM users;';
+const GET_ALL_USERS_SQL = 'SELECT id, username, firstname, lastname, seasonpoints FROM users ORDER BY seasonpoints DESC;';
 const GET_USER_BY_ID_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE id = $1;';
 const LOG_IN_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE username = $1 AND password = $2;';
 const CREATE_USER_SQL = 'INSERT INTO users (username, password, firstname, lastname) VALUES ($1, $2, $3, $4);';
