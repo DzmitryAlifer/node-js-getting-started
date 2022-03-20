@@ -16,6 +16,7 @@ const GET_ALL_USERS_SQL = 'SELECT id, username, firstname, lastname, seasonpoint
 const GET_USER_BY_ID_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE id = $1;';
 const LOG_IN_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE username = $1 AND password = $2;';
 const CREATE_USER_SQL = 'INSERT INTO users (username, password, firstname, lastname) VALUES ($1, $2, $3, $4);';
+const UPDATE_USER_POINTS_SQL = 'UPDATE users SET seasonpoints = $2 WHERE userid = $1;';
 
 const GET_ALL_PREDICTIONS_SQL = 'SELECT * FROM predictions;';
 const GET_ALL_USER_PREDICTIONS_SQL = 'SELECT * FROM predictions WHERE userId = $1;';
@@ -29,7 +30,6 @@ const UPDATE_DRIVER_RESULT_SQL = 'UPDATE driver_results SET qualifying = $3, rac
 
 const GET_PLAYERS_YEAR_RESULTS_SQL = 'SELECT * FROM player_results WHERE year = $1;';
 const POST_PLAYER_RESULT_SQL = 'INSERT INTO player_results (year, round, userid, qual_guessed_on_list, qual_guessed_position, race_guessed_on_list, race_guessed_position) VALUES ($1, $2, $3, $4, $5, $6, $7);'
-
 
 
 const getAllUsers = async (request, response) => {
@@ -52,6 +52,18 @@ const createUser = async (request, response) => {
   const client = await pool.connect();
   const resultSet = await client.query(CREATE_USER_SQL, params);
   response.json(resultSet.rows[0]);
+  client.release();
+};
+
+const updateUsersPoints = async (request, response) => {
+  const client = await pool.connect();
+
+  for (let user of request.body) {
+    const params = [user.id, user.seasonpoints];
+    await client.query(UPDATE_USER_POINTS_SQL, params);
+  }
+
+  response.json(request.body);
   client.release();
 };
 
@@ -180,6 +192,7 @@ app.get('/', (req, res) => res.render('pages/index'));
 app.get('/users', getAllUsers);
 app.get('/users/:id', getUserById);
 app.post('/users', createUser);
+app.put('/users', updateUsersPoints);
 app.post('/login', login);
 
 app.get('/prediction', getAllPredictions);
