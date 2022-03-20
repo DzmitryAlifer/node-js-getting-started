@@ -60,7 +60,6 @@ const updateUsersPoints = async (request, response) => {
 
   for (let user of request.body) {
     const params = [user.id, user.seasonpoints];
-    console.log(params);
     await client.query(UPDATE_USER_POINTS_SQL, params);
   }
 
