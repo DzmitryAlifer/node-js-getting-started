@@ -175,9 +175,9 @@ const addPlayersResults = async (request, response) => {
 };
 
 const getNews = async (request, response) => {
-  const RRR = await axios.get('https://www.autosport.com/rss/f1/news/');
-  console.log('RRR', RRR);
-  response.json({});
+  const xml = await axios.get('https://www.autosport.com/rss/f1/news/');
+  console.log('RRR', xml);
+  response.json({xml});
 }
 
 
