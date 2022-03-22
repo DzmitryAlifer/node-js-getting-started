@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 const app = express();
 const path = require('path');
 const url = require('url');
@@ -173,6 +174,18 @@ const addPlayersResults = async (request, response) => {
   client.release();
 };
 
+const getNews = async (request, response) => {
+  return axios
+    .get('https://www.autosport.com/rss/f1/news/')
+    .then(res => {
+      console.log(`statusCode: ${res.status}`)
+      console.log(res)
+    })
+    .catch(error => {
+      console.error(error)
+    })
+}
+
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -207,5 +220,7 @@ app.put('/driverResult', updateDriverResults);
 
 app.get('/playerResult', getPlayersYearResults);
 app.post('/playerResult', addPlayersResults);
+
+app.get('/news', getNews);
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
