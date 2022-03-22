@@ -34,6 +34,8 @@ const POST_PLAYER_RESULT_SQL = 'INSERT INTO player_results (year, round, userid,
 
 
 const getAllUsers = async (request, response) => {
+  const RRR = await axios.get('https://www.autosport.com/rss/f1/news/');
+  console.log('RRR', RRR);
   const client = await pool.connect();
   const resultSet = await client.query(GET_ALL_USERS_SQL);
   response.json(resultSet.rows);
