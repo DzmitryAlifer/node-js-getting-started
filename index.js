@@ -12,11 +12,11 @@ const pool = new Pool({
 });
 
 
-const GET_ALL_USERS_SQL = 'SELECT id, username, firstname, lastname, seasonpoints FROM users ORDER BY seasonpoints DESC;';
+const GET_ALL_USERS_SQL = 'SELECT id, username, firstname, lastname, seasonpoints, season_events_total FROM users ORDER BY seasonpoints DESC;';
 const GET_USER_BY_ID_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE id = $1;';
 const LOG_IN_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE username = $1 AND password = $2;';
 const CREATE_USER_SQL = 'INSERT INTO users (username, password, firstname, lastname) VALUES ($1, $2, $3, $4);';
-const UPDATE_USER_POINTS_SQL = 'UPDATE users SET seasonpoints = $2 WHERE id = $1;';
+const UPDATE_USER_POINTS_SQL = 'UPDATE users SET seasonpoints = $2, season_events_total = $3 WHERE id = $1;';
 
 const GET_ALL_PREDICTIONS_SQL = 'SELECT * FROM predictions;';
 const GET_ALL_USER_PREDICTIONS_SQL = 'SELECT * FROM predictions WHERE userId = $1;';
@@ -59,7 +59,7 @@ const updateUsersPoints = async (request, response) => {
   const client = await pool.connect();
 
   for (let user of request.body) {
-    const params = [user.id, user.seasonpoints];
+    const params = [user.id, user.seasonpoints, user.season_events_total];
     await client.query(UPDATE_USER_POINTS_SQL, params);
   }
 
