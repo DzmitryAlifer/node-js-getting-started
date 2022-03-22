@@ -175,6 +175,7 @@ const addPlayersResults = async (request, response) => {
 };
 
 const getNews = async (request, response) => {
+  console.log('REQQ', request);
   return axios
     .get('https://www.autosport.com/rss/f1/news/')
     .then(res => {
