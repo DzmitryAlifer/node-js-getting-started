@@ -175,22 +175,15 @@ const addPlayersResults = async (request, response) => {
   client.release();
 };
 
-const getNews = async (request, response, rssPath) => {
-  const xml = await axios.get(rssPath);
-  return await parser.Parser().parseStringPromise(xml.data);
-}
-
 const getNewsEn = async (request, response) => {
-  // const xml = await axios.get('https://www.autosport.com/rss/f1/news/');
-  // const parsedResponse = await parser.Parser().parseStringPromise(xml.data);
-  const parsedResponse = getNews(request, response, 'https://www.autosport.com/rss/f1/news/');
+  const xml = await axios.get('https://www.autosport.com/rss/f1/news/');
+  const parsedResponse = await parser.Parser().parseStringPromise(xml.data);
   response.json(parsedResponse);
 }
 
 const getNewsRu = async (request, response) => {
-  // const xml = await axios.get('https://www.f1news.ru/export/news.xml');
-  // const parsedResponse = await parser.Parser().parseStringPromise(xml.data);
-  const parsedResponse = getNews(request, response, 'https://www.f1news.ru/export/news.xml');
+  const xml = await axios.get('https://www.f1news.ru/export/news.xml');
+  const parsedResponse = await parser.Parser().parseStringPromise(xml.data);
   response.json(parsedResponse);
 }
 
