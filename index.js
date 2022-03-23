@@ -4,6 +4,7 @@ const app = express();
 const path = require('path');
 const url = require('url');
 const bodyParser = require('body-parser');
+const parser = require('xml2js');
 const cors = require('cors');
 const PORT = process.env.PORT || 5000;
 const {Pool} = require('pg');
@@ -176,9 +177,9 @@ const addPlayersResults = async (request, response) => {
 
 const getNews = async (request, response) => {
   const xml = await axios.get('https://www.autosport.com/rss/f1/news/');
-  console.log('RRR', xml.data);
-  // response.json({xml: xml.data});
-  response.json(xml.data);
+  const parsedResponse = await parser.Parser().parseStringPromise(xml.data);
+  console.log(parsedResponse);
+  response.json(parsedResponse);
 }
 
 
