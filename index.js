@@ -175,8 +175,14 @@ const addPlayersResults = async (request, response) => {
   client.release();
 };
 
-const getNews = async (request, response) => {
+const getNewsEn = async (request, response) => {
   const xml = await axios.get('https://www.autosport.com/rss/f1/news/');
+  const parsedResponse = await parser.Parser().parseStringPromise(xml.data);
+  response.json(parsedResponse);
+}
+
+const getNewsRu = async (request, response) => {
+  const xml = await axios.get('https://www.f1news.ru/export/news.xml');
   const parsedResponse = await parser.Parser().parseStringPromise(xml.data);
   response.json(parsedResponse);
 }
@@ -216,6 +222,7 @@ app.put('/driverResult', updateDriverResults);
 app.get('/playerResult', getPlayersYearResults);
 app.post('/playerResult', addPlayersResults);
 
-app.get('/news', getNews);
+app.get('/news/en', getNewsEn);
+app.get('/news/ru', getNewsRu);
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
