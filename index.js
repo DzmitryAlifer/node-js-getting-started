@@ -178,7 +178,7 @@ const getNews = async (request, response) => {
   const xml = await axios.get('https://www.autosport.com/rss/f1/news/');
   console.log('RRR', xml.data);
   // response.json({xml: xml.data});
-  response.set(xml.data);
+  response.json(xml.data);
 }
 
 
