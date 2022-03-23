@@ -175,7 +175,7 @@ const addPlayersResults = async (request, response) => {
   client.release();
 };
 
-const getNews = async (request, response, rssPath): string => {
+const getNews = async (request, response, rssPath) => {
   const xml = await axios.get(rssPath);
   return await parser.Parser().parseStringPromise(xml.data);
 }
