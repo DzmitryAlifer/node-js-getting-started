@@ -82,10 +82,9 @@ const login = async (request, response) => {
 };
 
 const getTeamVsTeamProposal = async (request, response) => {
-  const params = [request.params.year, request.params.round];
-  console.log('8888888888888', request)
+  const {year, round} = url.parse(request.url, true).query;
   const client = await pool.connect();
-  const resultSet = await client.query(GET_TEAM_VS_TEAM_PROPOSAL, params);
+  const resultSet = await client.query(GET_TEAM_VS_TEAM_PROPOSAL, [year, round]);
   response.json(resultSet.rows);
   client.release();
 };
