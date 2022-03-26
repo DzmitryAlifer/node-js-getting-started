@@ -20,6 +20,8 @@ const LOG_IN_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE us
 const CREATE_USER_SQL = 'INSERT INTO users (username, password, firstname, lastname) VALUES ($1, $2, $3, $4);';
 const UPDATE_USER_POINTS_SQL = 'UPDATE users SET seasonpoints = $2, season_events_total = $3 WHERE id = $1;';
 
+const GET_TEAM_VS_TEAM_PROPOSAL = 'SELECT * FROM team_vs_team WHERE year = $1 and round = $2;';
+
 const GET_ALL_PREDICTIONS_SQL = 'SELECT * FROM predictions;';
 const GET_ALL_USER_PREDICTIONS_SQL = 'SELECT * FROM predictions WHERE userId = $1;';
 const GET_PREDICTION_SQL = 'SELECT * FROM predictions WHERE userId = $1 AND round = $2;';
@@ -76,6 +78,13 @@ const login = async (request, response) => {
   resultSet.rows.length === 1 ? 
       response.status(200).json(resultSet.rows[0]) : 
       response.status(401).json(null);
+  client.release();
+};
+
+const getTeamVsTeamProposal = async (request, response) => {
+  const client = await pool.connect();
+  const resultSet = await client.query(GET_TEAM_VS_TEAM_PROPOSAL, [request.params.year, request.params.round]);
+  response.json(resultSet.rows);
   client.release();
 };
 
@@ -208,6 +217,8 @@ app.get('/users/:id', getUserById);
 app.post('/users', createUser);
 app.put('/users', updateUsersPoints);
 app.post('/login', login);
+
+app.get('/teamVsTeamProposal', getTeamVsTeamProposal);
 
 app.get('/prediction', getAllPredictions);
 app.get('/prediction', getAllUserPredictions);
