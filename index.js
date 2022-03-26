@@ -185,7 +185,8 @@ const addPlayersResults = async (request, response) => {
 };
 
 const getNewsEn = async (request, response) => {
-  const xml = await axios.get('https://www.autosport.com/rss/f1/news/');
+  // const xml = await axios.get('https://www.autosport.com/rss/f1/news/');
+  const xml = await axios.get('https://www.lostfilm.tv/rss.xml');
   const parsedResponse = await parser.Parser().parseStringPromise(xml.data);
   response.json(parsedResponse);
 }
