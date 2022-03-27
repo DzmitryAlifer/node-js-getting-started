@@ -34,6 +34,7 @@ const UPDATE_DRIVER_RESULT_SQL = 'UPDATE driver_results SET qualifying = $3, rac
 
 const GET_PLAYERS_YEAR_RESULTS_SQL = 'SELECT * FROM player_results WHERE year = $1;';
 const POST_PLAYER_RESULT_SQL = 'INSERT INTO player_results (year, round, userid, qual_guessed_on_list, qual_guessed_position, race_guessed_on_list, race_guessed_position) VALUES ($1, $2, $3, $4, $5, $6, $7);'
+const UPDATE_PLAYER_RESULT_SQL = 'UPDATE player_results (year, round, userid, qual_guessed_on_list, qual_guessed_position, race_guessed_on_list, race_guessed_position) VALUES ($4, $5, $6, $7) WHERE year = $1 AND round = $2 AND userid = $3;'
 
 
 const getAllUsers = async (request, response) => {
@@ -185,6 +186,26 @@ const addPlayersResults = async (request, response) => {
   client.release();
 };
 
+const updatePlayersResults = async (request, response) => {
+  const client = await pool.connect();
+
+  for (let playerResult of request.body) {
+    const params = [
+      playerResult.year,
+      playerResult.round,
+      playerResult.userid,
+      playerResult.qual_guessed_on_list,
+      playerResult.qual_guessed_position,
+      playerResult.race_guessed_on_list,
+      playerResult.race_guessed_position,
+    ];
+    await client.query(UPDATE_PLAYER_RESULT_SQL, params);
+  }
+
+  response.json([]);
+  client.release();
+};
+
 const getNewsEn = async (request, response) => {
   const xml = await axios.get('https://www.autosport.com/rss/f1/news/');
   const parsedResponse = await parser.Parser().parseStringPromise(xml.data);
@@ -233,6 +254,7 @@ app.put('/driverResult', updateDriverResults);
 
 app.get('/playerResult', getPlayersYearResults);
 app.post('/playerResult', addPlayersResults);
+app.put('/playerResult', updatePlayersResults);
 
 app.get('/news/en', getNewsEn);
 app.get('/news/ru', getNewsRu);
