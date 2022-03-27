@@ -114,7 +114,7 @@ const getPrediction = async (request, response) => {
 };
 
 const addPrediction = async (request, response) => {
-  const params = [request.body.userid, request.body.round, request.body.qualification, request.body.race, request.body.teamVsTeam];
+  const params = [request.body.userid, request.body.round, request.body.qualification, request.body.race, request.body.team_vs_team];
   const client = await pool.connect();
   const resultSet = await client.query(POST_PREDICTION_SQL, params);
   const lastPredictionIndex = resultSet.rows.length - 1;
@@ -123,7 +123,7 @@ const addPrediction = async (request, response) => {
 };
 
 const updatePrediction = async (request, response) => {
-  const params = [request.body.userid, request.body.round, request.body.qualification, request.body.race, request.body.teamVsTeam];
+  const params = [request.body.userid, request.body.round, request.body.qualification, request.body.race, request.body.team_vs_team];
   const client = await pool.connect();
   const resultSet = await client.query(UPDATE_PREDICTION_SQL, params);
   const lastPredictionIndex = resultSet.rows.length - 1;
