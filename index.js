@@ -25,8 +25,8 @@ const GET_TEAM_VS_TEAM_PROPOSAL = 'SELECT * FROM team_vs_team WHERE year = $1 an
 const GET_ALL_PREDICTIONS_SQL = 'SELECT * FROM predictions;';
 const GET_ALL_USER_PREDICTIONS_SQL = 'SELECT * FROM predictions WHERE userId = $1;';
 const GET_PREDICTION_SQL = 'SELECT * FROM predictions WHERE userId = $1 AND round = $2;';
-const POST_PREDICTION_SQL = 'INSERT INTO predictions (userid, round, qualification, race) VALUES ($1, $2, $3, $4);'
-const UPDATE_PREDICTION_SQL = 'UPDATE predictions SET qualification = $3, race = $4 WHERE userid = $1 and round = $2;';
+const POST_PREDICTION_SQL = 'INSERT INTO predictions (userid, round, qualification, race, team_vs_team) VALUES ($1, $2, $3, $4, $5);'
+const UPDATE_PREDICTION_SQL = 'UPDATE predictions SET qualification = $3, race = $4, team_vs_team = $5 WHERE userid = $1 and round = $2;';
 
 const GET_YEAR_DRIVER_RESULTS_SQL = 'SELECT * FROM driver_results WHERE year = $1;';
 const POST_DRIVER_RESULT_SQL = 'INSERT INTO driver_results (year, round, qualifying, race) VALUES ($1, $2, $3, $4);'
@@ -114,7 +114,7 @@ const getPrediction = async (request, response) => {
 };
 
 const addPrediction = async (request, response) => {
-  const params = [request.body.userid, request.body.round, request.body.qualification, request.body.race];
+  const params = [request.body.userid, request.body.round, request.body.qualification, request.body.race, request.body.teamVsTeam];
   const client = await pool.connect();
   const resultSet = await client.query(POST_PREDICTION_SQL, params);
   const lastPredictionIndex = resultSet.rows.length - 1;
@@ -123,7 +123,7 @@ const addPrediction = async (request, response) => {
 };
 
 const updatePrediction = async (request, response) => {
-  const params = [request.body.userid, request.body.round, request.body.qualification, request.body.race];
+  const params = [request.body.userid, request.body.round, request.body.qualification, request.body.race, request.body.teamVsTeam];
   const client = await pool.connect();
   const resultSet = await client.query(UPDATE_PREDICTION_SQL, params);
   const lastPredictionIndex = resultSet.rows.length - 1;
