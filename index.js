@@ -75,7 +75,7 @@ const updateUsersPoints = async (request, response) => {
 
 const updateUserAvatar = async (request, response) => {
   const params = [request.body.userid, request.body.avatar];
-  console.log(params);
+  console.log(request.body);
   const client = await pool.connect();
   const resultSet = await client.query(UPDATE_USER_AVATAR_SQL, params);
   response.json(request.body);
