@@ -14,8 +14,8 @@ const pool = new Pool({
 });
 
 
-const GET_ALL_USERS_SQL = 'SELECT id, username, firstname, lastname, seasonpoints, season_events_total FROM users ORDER BY seasonpoints DESC;';
-const GET_USER_BY_ID_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE id = $1;';
+const GET_ALL_USERS_SQL = 'SELECT id, username, firstname, lastname, seasonpoints, season_events_total, avatar FROM users ORDER BY seasonpoints DESC;';
+const GET_USER_BY_ID_SQL = 'SELECT id, username, firstname, lastname, seasonpoints, season_events_total, avatar FROM users WHERE id = $1;';
 const LOG_IN_SQL = 'SELECT id, username, firstname, lastname FROM users WHERE username = $1 AND password = $2;';
 const CREATE_USER_SQL = 'INSERT INTO users (username, password, firstname, lastname) VALUES ($1, $2, $3, $4);';
 const UPDATE_USER_POINTS_SQL = 'UPDATE users SET seasonpoints = $2, season_events_total = $3 WHERE id = $1;';
@@ -77,7 +77,6 @@ const updateUserAvatar = async (request, response) => {
   const params = [request.body.userid, request.body.avatar];
   const client = await pool.connect();
   const resultSet = await client.query(UPDATE_USER_AVATAR_SQL, params);
-  const lastPredictionIndex = resultSet.rows.length - 1;
   response.json(request.body);
   client.release();
 };
