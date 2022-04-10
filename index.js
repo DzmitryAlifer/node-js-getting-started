@@ -35,7 +35,9 @@ const POST_DRIVER_RESULT_SQL = 'INSERT INTO driver_results (year, round, qualify
 const UPDATE_DRIVER_RESULT_SQL = 'UPDATE driver_results SET qualifying = $3, race = $4 WHERE year = $1 and round = $2;';
 
 const GET_PLAYERS_YEAR_RESULTS_SQL = 'SELECT * FROM player_results WHERE year = $1;';
-const POST_PLAYER_RESULT_SQL = 'INSERT INTO player_results (year, round, userid, qual_guessed_on_list, qual_guessed_position, race_guessed_on_list, race_guessed_position) VALUES ($1, $2, $3, $4, $5, $6, $7);'
+const POST_PLAYER_RESULT_SQL = 'INSERT INTO player_results ' +
+    '(year, round, userid, qual_guessed_on_list, qual_guessed_position, race_guessed_on_list, race_guessed_position, correct_teams, wrong_teams) ' +
+    'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);'
 const UPDATE_PLAYER_RESULT_SQL = 'UPDATE player_results (year, round, userid, qual_guessed_on_list, qual_guessed_position, race_guessed_on_list, race_guessed_position) VALUES ($4, $5, $6, $7) WHERE year = $1 AND round = $2 AND userid = $3;'
 
 
@@ -196,6 +198,8 @@ const addPlayersResults = async (request, response) => {
       playerResult.qual_guessed_position,
       playerResult.race_guessed_on_list,
       playerResult.race_guessed_position,
+      playerResult.correct_teams,
+      playerResult.wrong_teams,
     ];
     await client.query(POST_PLAYER_RESULT_SQL, params);
   }
