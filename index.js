@@ -21,7 +21,7 @@ const CREATE_USER_SQL = 'INSERT INTO users (username, password, firstname, lastn
 const UPDATE_USER_POINTS_SQL = 'UPDATE users SET seasonpoints = $2, season_events_total = $3 WHERE id = $1;';
 const UPDATE_USER_AVATAR_SQL = 'UPDATE users SET avatar = $2 WHERE id = $1;';
 
-const GET_TEAM_VS_TEAM_PROPOSAL = 'SELECT * FROM team_vs_team WHERE year = $1 and round = $2;';
+const GET_TEAM_VS_TEAM = 'SELECT * FROM team_vs_team WHERE year = $1 and round = $2;';
 
 const GET_ALL_PREDICTIONS_SQL = 'SELECT * FROM predictions;';
 const GET_ALL_USER_PREDICTIONS_SQL = 'SELECT * FROM predictions WHERE userId = $1;';
@@ -94,7 +94,7 @@ const login = async (request, response) => {
 const getTeamVsTeamProposal = async (request, response) => {
   const {year, round} = url.parse(request.url, true).query;
   const client = await pool.connect();
-  const resultSet = await client.query(GET_TEAM_VS_TEAM_PROPOSAL, [year, round]);
+  const resultSet = await client.query(GET_TEAM_VS_TEAM, [year, round]);
   response.json(resultSet.rows);
   client.release();
 };
