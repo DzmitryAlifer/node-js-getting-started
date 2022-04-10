@@ -91,7 +91,7 @@ const login = async (request, response) => {
   client.release();
 };
 
-const getTeamVsTeamProposal = async (request, response) => {
+const getTeamVsTeam = async (request, response) => {
   const {year, round} = url.parse(request.url, true).query;
   const client = await pool.connect();
   const resultSet = await client.query(GET_TEAM_VS_TEAM, [year, round]);
@@ -250,7 +250,7 @@ app.put('/users', updateUsersPoints);
 app.post('/login', login);
 app.put('/updateAvatar', updateUserAvatar);
 
-app.get('/teamVsTeamProposal', getTeamVsTeamProposal);
+app.get('/teamVsTeam', getTeamVsTeam);
 
 app.get('/prediction', getAllPredictions);
 app.get('/prediction', getAllUserPredictions);
