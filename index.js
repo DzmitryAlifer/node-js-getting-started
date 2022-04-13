@@ -83,7 +83,7 @@ const updateUserAvatar = async (request, response) => {
   const form = new IncomingForm();
   form.on('file', (field, file) => {
     console.log('AVATAR:', file.path);
-    const resultSet = await client.query(UPDATE_USER_AVATAR_SQL, params);
+    var resultSet = await client.query(UPDATE_USER_AVATAR_SQL, params);
     response.json(resultSet.rows[0]);
     client.release();
   })
