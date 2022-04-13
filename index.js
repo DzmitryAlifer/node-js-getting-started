@@ -90,8 +90,7 @@ const updateUserAvatar = async (request, response) => {
   form.on('end', () => {
     res.json()
   })
-  form.parse(req);
-  
+  form.parse(request);
 };
 
 const login = async (request, response) => {
