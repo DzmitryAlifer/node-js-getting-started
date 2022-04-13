@@ -82,7 +82,8 @@ const updateUserAvatar = async (request, response) => {
   const client = await pool.connect();
   const form = new IncomingForm();
   form.on('file', async (field, file) => {
-    console.log('AVATAR:', file.path);
+    console.log('AVATAR1:', field);
+    console.log('AVATAR2:', file);
     const resultSet = await client.query(UPDATE_USER_AVATAR_SQL, params);
     response.json(resultSet.rows[0]);
     client.release();
