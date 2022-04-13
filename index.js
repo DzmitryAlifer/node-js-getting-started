@@ -88,7 +88,7 @@ const updateUserAvatar = async (request, response) => {
     client.release();
   })
   form.on('end', () => {
-    res.json()
+    response.json()
   })
   form.parse(request);
 };
