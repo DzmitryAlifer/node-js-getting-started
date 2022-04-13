@@ -8,6 +8,7 @@ const parser = require('xml2js');
 const cors = require('cors');
 const PORT = process.env.PORT || 5000;
 const {Pool} = require('pg');
+const IncomingForm = require('formidable').IncomingForm;
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {rejectUnauthorized: false},
@@ -79,10 +80,18 @@ const updateUsersPoints = async (request, response) => {
 const updateUserAvatar = async (request, response) => {
   const params = [request.body.id, request.body.avatar];
   const client = await pool.connect();
-  console.log('AVATAR:', request.body.avatar);
-  const resultSet = await client.query(UPDATE_USER_AVATAR_SQL, params);
-  response.json(resultSet.rows[0]);
-  client.release();
+  const form = new IncomingForm();
+  form.on('file', (field, file) => {
+    console.log('AVATAR:', file.path);
+    const resultSet = await client.query(UPDATE_USER_AVATAR_SQL, params);
+    response.json(resultSet.rows[0]);
+    client.release();
+  })
+  form.on('end', () => {
+    res.json()
+  })
+  form.parse(req);
+  
 };
 
 const login = async (request, response) => {
